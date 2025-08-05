@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class Paddle : MonoBehaviour
 {
-    private Camera mainCamera;
     private SpriteRenderer spriteRenderer;
     private int lastScreenWidth;
     private int lastScreenHeight;
@@ -11,7 +10,6 @@ public class Paddle : MonoBehaviour
 
     void Start()
     {
-        mainCamera = Camera.main;
         spriteRenderer = GetComponent<SpriteRenderer>();
         lastScreenWidth = Screen.width;
         lastScreenHeight = Screen.height;
@@ -28,7 +26,7 @@ public class Paddle : MonoBehaviour
     private void DefineLimitX()
     {
         float width = CameraUtils.GetCameraWidth();
-        float paddleWidth = spriteRenderer.bounds.size.x;;
+        float paddleWidth = spriteRenderer.bounds.size.x;
         limitX = (width / 2) - (paddleWidth / 2);
     }
 
@@ -44,7 +42,7 @@ public class Paddle : MonoBehaviour
 
     private void MovePositionX()
     {
-        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Vector3 mousePosition = CameraUtils.MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector3 paddlePosition = transform.position;
 
         paddlePosition.x = Mathf.Clamp(mousePosition.x, -limitX, limitX);
