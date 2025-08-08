@@ -1,26 +1,38 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameManager : Singleton<GameManager>
 {
-
-    public GameState CurrentState { get; private set; }
+    public static event Action OnGameReady;
     [SerializeField] private Ball ball;
     [SerializeField] private Paddle paddle;
+    private GameState State;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Ball.OnBallLaunch += OnBallLaunch;
+    }
+
+    void OnDestroy()
+    {
+        Ball.OnBallLaunch -= OnBallLaunch;
+    }
 
     void Start()
     {
-        CurrentState = GameState.Ready;
-        ball.PrepareForLaunch();
-        ball.AttachToPaddle(paddle.transform);
+        UpdateGameState(GameState.Ready);
     }
 
-    void Update()
+    public void UpdateGameState(GameState newState)
     {
-        switch (CurrentState)
+        State = newState;
+
+        switch (State)
         {
             case GameState.Ready:
-                StartGameIfMouseIsPressed();
+                OnGameReady?.Invoke();
                 break;
 
             case GameState.Playing:
@@ -31,17 +43,13 @@ public class GameManager : Singleton<GameManager>
 
             case GameState.Win:
                 break;
-            //TODO create new state for CompletedLevel
         }
+
+
     }
-
-    public void StartGameIfMouseIsPressed()
+    
+    private void OnBallLaunch()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            CurrentState = GameState.Playing;
-            ball.Launch();
-        }
-
+        UpdateGameState(GameState.Playing);
     }
 }

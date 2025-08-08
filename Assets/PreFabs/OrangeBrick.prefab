@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4558709817673987765}
   - component: {fileID: 6801026617186554739}
   - component: {fileID: 7516569971978372529}
+  - component: {fileID: -3198557064633307963}
   m_Layer: 0
   m_Name: OrangeBrick
   m_TagString: Untagged
@@ -134,3 +135,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.52, y: 0.6}
   m_EdgeRadius: 0
+--- !u!114 &-3198557064633307963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347209183203440022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abc77cc079ed5694d9698d66a58c9b3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
