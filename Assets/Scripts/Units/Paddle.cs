@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Paddle : MonoBehaviour
 {
+    public static event Action<float> OnPaddleMovedX;
     private SpriteRenderer spriteRenderer;
     private int lastScreenWidth;
     private int lastScreenHeight;
@@ -45,8 +47,10 @@ public class Paddle : MonoBehaviour
         Vector3 mousePosition = CameraUtils.MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector3 paddlePosition = transform.position;
 
-        paddlePosition.x = Mathf.Clamp(mousePosition.x, -limitX, limitX);
+        float clampedX = Mathf.Clamp(mousePosition.x, -limitX, limitX);
+        paddlePosition.x = clampedX;
         transform.position = paddlePosition;
+        OnPaddleMovedX?.Invoke(clampedX);
     }
 
 

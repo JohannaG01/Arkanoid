@@ -5,35 +5,44 @@ using UnityEngine.InputSystem;
 public class Ball : MonoBehaviour
 {
     public static event Action OnBallLaunch;
-    [SerializeField] private Paddle paddle;
     [SerializeField] private float initialVelocityX;
     [SerializeField] private float initialVelocityY;
     [SerializeField] private float maxBounceAngleSpeedX;
-    private Vector3 paddleOffset;
     private Rigidbody2D ballRigidbody;
     private bool isBallLaunched;
 
     void Awake()
     {
-        ballRigidbody = GetComponent<Rigidbody2D>();
+        ballRigidbody = GetComponent<Rigidbody2D>(); 
+
         GameManager.OnGameReady += OnGameReady;
+        Paddle.OnPaddleMovedX += OnPaddleMovedX;
     }
 
     void OnDestroy()
     {
         GameManager.OnGameReady -= OnGameReady;
+        Paddle.OnPaddleMovedX -= OnPaddleMovedX;
     }
 
     void Update()
     {
-        HandleBallIsNotLaunched();
+        HandleBallBeforeLaunch();
     } 
 
     private void OnGameReady()
     {
-        PrepareForLaunch();
-        AttachToPaddle();
         isBallLaunched = false;
+        PrepareForLaunch();
+    }
+
+    private void OnPaddleMovedX(float paddleX)
+    {
+        if (!isBallLaunched)
+        {
+            transform.position = new Vector3(paddleX, transform.position.y, transform.position.z);
+        }
+        
     }
 
     private void PrepareForLaunch()
@@ -42,24 +51,12 @@ public class Ball : MonoBehaviour
         ballRigidbody.linearVelocity = Vector2.zero;
     }
 
-    private void AttachToPaddle()
-    {
-        paddleOffset = transform.position - paddle.transform.position;
-        PositionOnPaddle();
-    }
-
-    private void HandleBallIsNotLaunched()
+    private void HandleBallBeforeLaunch()
     {
         if (!isBallLaunched)
         {
-            PositionOnPaddle();
             LaunchBallIfMouseIsPressed();
         }
-    }
-
-    private void PositionOnPaddle()
-    {
-        transform.position = paddle.transform.position + paddleOffset;
     }
 
     private void LaunchBallIfMouseIsPressed()
