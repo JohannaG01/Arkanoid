@@ -10,10 +10,12 @@ public class Ball : MonoBehaviour
     [SerializeField] private float maxBounceAngleSpeedX;
     private Rigidbody2D ballRigidbody;
     private bool isBallLaunched;
+    private Vector3 initialPosition;
 
     void Awake()
     {
-        ballRigidbody = GetComponent<Rigidbody2D>(); 
+        ballRigidbody = GetComponent<Rigidbody2D>();
+        initialPosition = transform.position;
 
         GameManager.OnGameReady += OnGameReady;
         Paddle.OnPaddleMovedX += OnPaddleMovedX;
@@ -25,30 +27,24 @@ public class Ball : MonoBehaviour
         Paddle.OnPaddleMovedX -= OnPaddleMovedX;
     }
 
+    void FixedUpdate()
+    {
+        ballRigidbody.linearVelocity = ballRigidbody.linearVelocity.normalized * initialVelocityY;
+    }
+
     void Update()
     {
         HandleBallBeforeLaunch();
-    } 
+    }
 
     private void OnGameReady()
     {
-        isBallLaunched = false;
-        PrepareForLaunch();
+        ResetBallPosition();
     }
 
     private void OnPaddleMovedX(float paddleX)
     {
-        if (!isBallLaunched)
-        {
-            transform.position = new Vector3(paddleX, transform.position.y, transform.position.z);
-        }
-        
-    }
-
-    private void PrepareForLaunch()
-    {
-        ballRigidbody.bodyType = RigidbodyType2D.Kinematic;
-        ballRigidbody.linearVelocity = Vector2.zero;
+        UpdatePositionToPaddleX(paddleX);
     }
 
     private void HandleBallBeforeLaunch()
@@ -59,42 +55,54 @@ public class Ball : MonoBehaviour
         }
     }
 
+    private void ResetBallPosition()
+    {
+        isBallLaunched = false;
+        ballRigidbody.bodyType = RigidbodyType2D.Kinematic;
+        ballRigidbody.linearVelocity = Vector2.zero;
+        transform.position = initialPosition;
+    }
+
+    private void UpdatePositionToPaddleX(float paddleX)
+    {
+        if (!isBallLaunched)
+        {
+            transform.position = new Vector3(paddleX, transform.position.y, transform.position.z);
+        }
+    }
+
     private void LaunchBallIfMouseIsPressed()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Launch();
+            ballRigidbody.bodyType = RigidbodyType2D.Dynamic;
+            ballRigidbody.linearVelocity = new Vector2(initialVelocityX, initialVelocityY);
             isBallLaunched = true;
+
             OnBallLaunch?.Invoke();
         }
 
     }
 
-    private void Launch()
-    {
-        ballRigidbody.bodyType = RigidbodyType2D.Dynamic;
-        ballRigidbody.linearVelocity = new Vector2(initialVelocityX, initialVelocityY);
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-        OnPaddleCollisionEnter2D(collision);
-    }
-
-    private void OnPaddleCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Paddle"))
         {
-            Vector3 paddlePosition = collision.collider.bounds.center;
-            float paddleWidth = collision.collider.bounds.size.x / 2;
-
-            float hitPoint = collision.contacts[0].point.x;
-            float difference = hitPoint - paddlePosition.x;
-            float normalizedDifference = difference / paddleWidth;
-
-            Vector2 newVelocity = new Vector2(normalizedDifference * maxBounceAngleSpeedX, Mathf.Abs(ballRigidbody.linearVelocity.y));
-            ballRigidbody.linearVelocity = newVelocity;
+            BounceOnPaddle(collision);
         }
+    }
+
+    private void BounceOnPaddle(Collision2D collision)
+    {
+        Vector3 paddlePosition = collision.collider.bounds.center;
+        float paddleWidth = collision.collider.bounds.size.x / 2;
+
+        float hitPoint = collision.contacts[0].point.x;
+        float difference = hitPoint - paddlePosition.x;
+        float normalizedDifference = difference / paddleWidth;
+
+        Vector2 newVelocity = new Vector2(normalizedDifference * maxBounceAngleSpeedX, Mathf.Abs(ballRigidbody.linearVelocity.y));
+        ballRigidbody.linearVelocity = newVelocity;
     }
 
 }

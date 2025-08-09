@@ -13,8 +13,6 @@ public class Paddle : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        lastScreenWidth = Screen.width;
-        lastScreenHeight = Screen.height;
 
         DefineLimitX();
     }
@@ -27,8 +25,12 @@ public class Paddle : MonoBehaviour
 
     private void DefineLimitX()
     {
+        lastScreenWidth = Screen.width;
+        lastScreenHeight = Screen.height;
+
         float width = CameraUtils.GetCameraWidth();
         float paddleWidth = spriteRenderer.bounds.size.x;
+
         limitX = (width / 2) - (paddleWidth / 2);
     }
 
@@ -36,8 +38,6 @@ public class Paddle : MonoBehaviour
     {
         if (Screen.width != lastScreenWidth || Screen.height != lastScreenHeight)
         {
-            lastScreenWidth = Screen.width;
-            lastScreenHeight = Screen.height;
             DefineLimitX();
         }
     }
@@ -50,6 +50,7 @@ public class Paddle : MonoBehaviour
         float clampedX = Mathf.Clamp(mousePosition.x, -limitX, limitX);
         paddlePosition.x = clampedX;
         transform.position = paddlePosition;
+        
         OnPaddleMovedX?.Invoke(clampedX);
     }
 

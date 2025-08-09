@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b183e8107a2dbb849adf1c71ff343c3e, type: 3}
-  m_Name: Level1
+  m_Name: Level2
   m_EditorClassIdentifier: 
   bricks:
   - brickPrefab: {fileID: 7186182055234240483, guid: 104ce39b07946c645bc6f9c4b039419a, type: 3}
@@ -99,4 +99,19 @@ MonoBehaviour:
     hitPoints: 1
   - brickPrefab: {fileID: 5152261148564232571, guid: 159a4e329cf3419459751c11a9fbf16e, type: 3}
     position: {x: -6.08, y: 3.7}
+    hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: 0, y: 1.695}
+    hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: 4.04, y: 1.695}
+    hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: -4.04, y: 1.695}
+    hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: 1.01, y: 1.695}
+    hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: -1.01, y: 1.695}
     hitPoints: 1

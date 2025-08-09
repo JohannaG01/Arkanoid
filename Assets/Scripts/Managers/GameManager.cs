@@ -13,11 +13,14 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         Ball.OnBallLaunch += OnBallLaunch;
+        LevelManager.OnLevelComplete += OnLevelComplete;
+        LevelManager.OnGameWin += OnGameWin;
     }
 
     void OnDestroy()
     {
         Ball.OnBallLaunch -= OnBallLaunch;
+        LevelManager.OnLevelComplete -= OnLevelComplete;
     }
 
     void Start()
@@ -42,14 +45,25 @@ public class GameManager : Singleton<GameManager>
                 break;
 
             case GameState.Win:
+                Debug.Log("You Win!");
                 break;
         }
 
 
     }
-    
+
     private void OnBallLaunch()
     {
         UpdateGameState(GameState.Playing);
+    }
+
+    private void OnLevelComplete()
+    {
+        UpdateGameState(GameState.Ready);
+    }
+
+    private void OnGameWin()
+    {
+        UpdateGameState(GameState.Win);
     }
 }

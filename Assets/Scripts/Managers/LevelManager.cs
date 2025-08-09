@@ -4,34 +4,82 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public static event Action OnLevelComplete;
+    public static event Action OnGameWin;
     [SerializeField] private Level[] levels;
     private Level currentLevel;
+    private int currentLevelIndex = 0;
+    private int bricksLeft;
 
     void Awake()
-    {   
-        currentLevel = levels[0];
+    {
         GameManager.OnGameReady += OnGameReady;
+        Brick.OnBrickDestroyed += OnBrickDestroyed;
     }
 
     void OnDestroy()
     {
         GameManager.OnGameReady -= OnGameReady;
+        Brick.OnBrickDestroyed -= OnBrickDestroyed;
     }
 
     private void OnGameReady()
     {
-        LoadLevel();
-    }
-    
-    private void LoadLevel()
-    {
-        foreach (var brick in currentLevel.Bricks)
+        if (currentLevelIndex >= levels.Length)
         {
-            Vector3 position = new Vector3(brick.Position.x, brick.Position.y, 0f);
-            GameObject brickObj = Instantiate(brick.BrickPrefab, position, Quaternion.identity, transform);
-
-            var brickScript = brickObj.GetComponent<Brick>();
-            brickScript.Setup(brick.HitPoints);
+            OnGameWin?.Invoke();
+        }
+        else
+        {
+            SelectLevel();
+            LoadLevel();
         }
     }
+
+    private void OnBrickDestroyed()
+    {
+        bricksLeft--;
+        InvokeOnLevelCompleteIfNoBricksLeft();
+    }
+
+    private void InvokeOnLevelCompleteIfNoBricksLeft()
+    {
+        if (bricksLeft <= 0)
+        {
+            OnLevelComplete?.Invoke();
+        }
+    }
+
+    private void SelectLevel()
+    {
+        currentLevel = levels[currentLevelIndex];
+        bricksLeft = currentLevel.Bricks.Length;
+        currentLevelIndex++;
+    }
+
+    private void LoadLevel()
+    {
+        foreach (var brickData in currentLevel.Bricks)
+        {
+            GameObject brick = CreateBrick(brickData);
+            SetupBrick(brick, brickData);
+        }
+    }
+
+    private GameObject CreateBrick(BrickDetails brickData)
+    {
+        Vector3 position = new Vector3(brickData.Position.x, brickData.Position.y, 0f);
+        return Instantiate(brickData.BrickPrefab, position, Quaternion.identity, transform);
+    }
+
+    private void SetupBrick(GameObject brickObj, BrickDetails brickData)
+    {
+        var brickScript = brickObj.GetComponent<Brick>();
+
+        if (brickScript != null)
+        {
+            brickScript.Setup(brickData.HitPoints);
+        }
+    }
+
 }

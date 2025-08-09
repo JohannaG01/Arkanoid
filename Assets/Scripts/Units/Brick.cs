@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 public class Brick : MonoBehaviour
 {
+    public static event Action OnBrickDestroyed;
     private int hitPoints;
 
     public void Setup(int hitPoints)
@@ -12,17 +14,22 @@ public class Brick : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
-            HandleBallCollision();
+            TakeDamage();
         }
     }
 
-    private void HandleBallCollision()
+    private void TakeDamage()
     {
         hitPoints--;
+        DestroyIfNoHitPointsLeft();
+    }
 
+    private void DestroyIfNoHitPointsLeft()
+    {
         if (hitPoints <= 0)
         {
             Destroy(gameObject);
+            OnBrickDestroyed?.Invoke();
         }
     }
 }

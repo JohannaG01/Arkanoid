@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b183e8107a2dbb849adf1c71ff343c3e, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  bricks:
+  - brickPrefab: {fileID: 5152261148564232571, guid: 159a4e329cf3419459751c11a9fbf16e, type: 3}
+    position: {x: -6.08, y: 3.7}
+    hitPoints: 1
