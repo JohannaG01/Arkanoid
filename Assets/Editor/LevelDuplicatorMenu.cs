@@ -8,6 +8,7 @@ public static class LevelDuplicatorMenu
     public static void DuplicateSelectedLevel()
     {
         Level selectedLevel = Selection.activeObject as Level;
+        
         if (selectedLevel == null)
         {
             Debug.LogWarning("Select a Level asset to duplicate.");
