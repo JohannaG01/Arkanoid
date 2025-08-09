@@ -13,17 +13,15 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
-        if (Instance != this)
+        if (Instance == this)
         {
-            Debug.Log($"Avoiding awake of duplicate instance of {typeof(GameManager).Name} on {gameObject.name}");
-            Destroy(gameObject);
-            return;
+            Ball.OnBallLaunch += OnBallLaunch;
+            LevelManager.OnLevelComplete += OnLevelComplete;
+            LevelManager.OnGameWin += OnGameWin;
+            BottomBorder.OnBallLost += OnBallLost;
+            UnitySceneManager.OnGameSceneLoad += OnGameSceneLoad;
         }
-        Ball.OnBallLaunch += OnBallLaunch;
-        LevelManager.OnLevelComplete += OnLevelComplete;
-        LevelManager.OnGameWin += OnGameWin;
-        BottomBorder.OnBallLost += OnBallLost;
-        UnitySceneManager.OnGameSceneLoad += OnGameSceneLoad;
+
     }
 
     void OnDestroy()
@@ -36,7 +34,6 @@ public class GameManager : Singleton<GameManager>
 
     private void UpdateGameState(GameState newState)
     {
-        Debug.Log($"Cambiando estado del juego de {State} a {newState}");
         if (State == newState) return;
 
         State = newState;

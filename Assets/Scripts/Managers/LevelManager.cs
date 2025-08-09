@@ -25,7 +25,6 @@ public class LevelManager : MonoBehaviour
 
     private void OnGameReady()
     {
-        Debug.Log("Juego listo, seleccionando nivel.");
         if (currentLevelIndex >= levels.Length)
         {
             OnGameWin?.Invoke();
@@ -53,7 +52,6 @@ public class LevelManager : MonoBehaviour
 
     private void SelectLevel()
     {
-        Debug.Log($"Seleccionando nivel {currentLevelIndex + 1}");
         currentLevel = levels[currentLevelIndex];
         bricksLeft = currentLevel.Bricks.Length;
         currentLevelIndex++;

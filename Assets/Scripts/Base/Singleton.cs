@@ -8,7 +8,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.Log($"Destroying duplicate instance of {typeof(T).Name} on {gameObject.name}");
             Destroy(gameObject);
             return;
         }
@@ -16,7 +15,5 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         Instance = this as T;
         transform.parent = null;
         DontDestroyOnLoad(gameObject);
-        Debug.Log($"Singleton {typeof(T).Name} assigned to {gameObject.name}");
-
     }
 }

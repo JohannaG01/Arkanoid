@@ -11,21 +11,18 @@ public class UnitySceneManager : Singleton<UnitySceneManager>
     protected override void Awake()
     {
         base.Awake();
-        if (Instance != this)
+        if (Instance == this)
         {
-            Debug.Log($"Avoiding awake of duplicate instance of {typeof(UnitySceneManager).Name} on {gameObject.name}");
-            Destroy(gameObject);
-            return;
+            ReplayButton.OnReplayButtonPressed += OnReplayButtonPressed;
+            PlayButton.OnPlayButtonPressed += OnPlayButtonPressed;
+            GameManager.OnGameOver += OnGameOver;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
-        ReplayButton.OnReplayButtonPressed += OnReplayButtonPressed;
-        PlayButton.OnPlayButtonPressed += OnPlayButtonPressed;
-        GameManager.OnGameOver += OnGameOver;
-        SceneManager.sceneLoaded += OnSceneLoaded;
+
     }
 
     void OnDestroy()
     {
-        Debug.Log("SceneManager OnDestroy, desuscribiendo de sceneLoaded");
         ReplayButton.OnReplayButtonPressed -= OnReplayButtonPressed;
         PlayButton.OnPlayButtonPressed -= OnPlayButtonPressed;
         GameManager.OnGameOver -= OnGameOver;
@@ -66,7 +63,6 @@ public class UnitySceneManager : Singleton<UnitySceneManager>
     {
         if (scene.name == "GameScene" && scene != currentScene)
         {
-            Debug.Log($"Escena de juego cargada, invocando evento. {Instance.GetHashCode()}");
             OnGameSceneLoad?.Invoke();
         }
 
