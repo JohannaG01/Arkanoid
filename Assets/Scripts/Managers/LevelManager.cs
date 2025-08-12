@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
     private void SelectLevel()
     {
         currentLevel = levels[currentLevelIndex];
-        bricksLeft = currentLevel.Bricks.Length;
+        bricksLeft = currentLevel.BreakableBricksLength;
         currentLevelIndex++;
     }
 

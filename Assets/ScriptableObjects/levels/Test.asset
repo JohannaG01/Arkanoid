@@ -16,3 +16,7 @@ MonoBehaviour:
   - brickPrefab: {fileID: 5152261148564232571, guid: 159a4e329cf3419459751c11a9fbf16e, type: 3}
     position: {x: -6.08, y: 3.7}
     hitPoints: 1
+  - brickPrefab: {fileID: 2649274228851151326, guid: 38710afe4218c1848ab0bd3e88380a70, type: 3}
+    position: {x: 0, y: 2.5}
+    hitPoints: 1
+  breakableBricksLength: 1
